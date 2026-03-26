@@ -1,0 +1,247 @@
+[
+  {
+    "gene_id": "blaNDM-1",
+    "name": "blaNDM-1",
+    "organism": "Klebsiella pneumoniae",
+    "mechanism": "Beta-lactamase (carbapenem resistance)",
+    "length_bp": 332,
+    "k": 21,
+    "n_kmers": 47,
+    "kmers": [
+      "ACATTCTTCA",
+      "AGCATGCTGG",
+      "ATGCTGGTTG",
+      "CGTGCTGGTC",
+      "CCTCGCCCTG",
+      "CCCTGCTCGC",
+      "CCCTCGCGCT",
+      "CCTCGCGCTG",
+      "CGCGCTGCTG",
+      "AAACTGCTCG",
+      "AACTGCTCGA",
+      "ACTCGCTGAC",
+      "ACGGCGGTGC",
+      "CCGCTGGTGC",
+      "ATGCCGGTCG",
+      "CCGGTCGGCC",
+      "CCTGCTGCAA",
+      "CAACGGCTGA",
+      "AACGGCTGAT",
+      "AAACCCAGCC",
+      "AACCCAGCCT",
+      "ACCCAGCCTG",
+      "AGCCTGCCGC",
+      "ATGAAACTGC",
+      "AAACTGCCGG",
+      "AAAATCATGC",
+      "AAATCATGCT",
+      "AATCATGCTG",
+      "ATCATGCTGG",
+      "ATGCTGGTCC",
+      "CCTCGTCATC",
+      "CATCGGCGTG",
+      "ATCGGCGTGC",
+      "ATCCCGATCG",
+      "ATCGGCGTCT",
+      "CGGCGTCTTT",
+      "ACGTGATGAT",
+      "ATCGTGCCGC",
+      "ACCCCGATGC",
+      "ATGCCGGACA",
+      "ACACCCCGAC",
+      "ACCCCGACCC",
+      "ACCCCGACGC",
+      "ACGCGCTGAC",
+      "ACACCTACGT",
+      "ACCTACGTAC",
+      "ACGTACGTAC"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "oqxAB",
+    "name": "oqxAB",
+    "organism": "Escherichia coli",
+    "mechanism": "Efflux pump (fluoroquinolone resistance)",
+    "length_bp": 338,
+    "k": 21,
+    "n_kmers": 22,
+    "kmers": [
+      "AAACTGATCC",
+      "AACTGATCCT",
+      "ACTGATCCTG",
+      "ATCCTGGTCG",
+      "CCTGGTCGTG",
+      "CATCGCCTTC",
+      "ATCGCCTTCC",
+      "CCTGGCTGCT",
+      "ATGCTGGTCG",
+      "ATGCCTGCTC",
+      "CCTGCTCGGC",
+      "CGATCTGATG",
+      "ATCTGATGCC",
+      "ATGCCGCTGA",
+      "ACCGTGCTGA",
+      "ATCCTGATGA",
+      "ATGATGCTGA",
+      "ATGATGATGA",
+      "ATGATGATGC",
+      "ATGATGATCG",
+      "ATGATCGATC",
+      "ATCGATCGAT"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "acrAB",
+    "name": "acrAB",
+    "organism": "Salmonella enterica",
+    "mechanism": "Multidrug efflux pump",
+    "length_bp": 330,
+    "k": 21,
+    "n_kmers": 6,
+    "kmers": [
+      "AACGTCCTGC",
+      "ACGTCCTGCT",
+      "CCTGCTGCTG",
+      "CTGATGCTGG",
+      "ATGCTGGCTG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "tetM",
+    "name": "tetM",
+    "organism": "Streptococcus pneumoniae",
+    "mechanism": "Tetracycline resistance",
+    "length_bp": 321,
+    "k": 21,
+    "n_kmers": 3,
+    "kmers": [
+      "AGCCTGGTGC",
+      "ACTGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "vanA",
+    "name": "vanA",
+    "organism": "Enterococcus faecium",
+    "mechanism": "Vancomycin resistance",
+    "length_bp": 406,
+    "k": 21,
+    "n_kmers": 3,
+    "kmers": [
+      "ACACTGATGA",
+      "ACTGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "blaTEM-1",
+    "name": "blaTEM-1",
+    "organism": "Escherichia coli",
+    "mechanism": "Beta-lactamase (ampicillin resistance)",
+    "length_bp": 965,
+    "k": 21,
+    "n_kmers": 5,
+    "kmers": [
+      "ACACTGAGCG",
+      "ACTGAGCGTC",
+      "AGCGTCCTCA",
+      "ATCGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "qnrA",
+    "name": "qnrA",
+    "organism": "Klebsiella pneumoniae",
+    "mechanism": "Quinolone resistance (qnr)",
+    "length_bp": 463,
+    "k": 21,
+    "n_kmers": 1,
+    "kmers": [
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "fosA",
+    "name": "fosA",
+    "organism": "Streptococcus agalactiae",
+    "mechanism": "Fosfomycin resistance",
+    "length_bp": 575,
+    "k": 21,
+    "n_kmers": 4,
+    "kmers": [
+      "AAACTGATGA",
+      "AACTGATGAT",
+      "ACTGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "aadB",
+    "name": "aadB",
+    "organism": "Pseudomonas aeruginosa",
+    "mechanism": "Aminoglycoside resistance",
+    "length_bp": 613,
+    "k": 21,
+    "n_kmers": 3,
+    "kmers": [
+      "AGATCTGATG",
+      "ATCTGATGAT",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "tetA",
+    "name": "tetA",
+    "organism": "Vibrio cholerae",
+    "mechanism": "Tetracycline efflux",
+    "length_bp": 821,
+    "k": 21,
+    "n_kmers": 4,
+    "kmers": [
+      "AAACTGATGA",
+      "AACTGATGAT",
+      "ACTGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "rpoB-H445Y",
+    "name": "rpoB-H445Y",
+    "organism": "Mycobacterium tuberculosis",
+    "mechanism": "Rifampicin resistance (RRDR mutation)",
+    "length_bp": 937,
+    "k": 21,
+    "n_kmers": 2,
+    "kmers": [
+      "ACCGATGATG",
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  },
+  {
+    "gene_id": "pbpB",
+    "name": "pbpB",
+    "organism": "Neisseria gonorrhoeae",
+    "mechanism": "Beta-lactam resistance (BLNAR)",
+    "length_bp": 725,
+    "k": 21,
+    "n_kmers": 1,
+    "kmers": [
+      "ATGATGATGA"
+    ],
+    "phenotype_note": "Genotype only; phenotype prediction not supported"
+  }
+]

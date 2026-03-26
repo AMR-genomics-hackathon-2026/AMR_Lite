@@ -1,0 +1,43 @@
+# Node dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# npm
+npm-debug.log*
+npm-error.log*
+
+# Environment
+.env
+.env.local
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.dylib
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Build artifacts (if any)
+dist/
+build/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary
+*.tmp
+.cache/

@@ -1,0 +1,32 @@
+{
+  "name": "amr-lite",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Static, browser-only, privacy-preserving AMR gene detection via k-mer containment. Genotype-only demo.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "npx serve . --listen 3000",
+    "serve": "npx serve . --listen 3000",
+    "build": "echo 'No build step required for static site'",
+    "start": "npm run serve"
+  },
+  "keywords": [
+    "amr",
+    "antimicrobial-resistance",
+    "kmer",
+    "containment",
+    "genomics",
+    "static",
+    "privacy"
+  ],
+  "author": "AMR Lite Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "pako": "^2.1.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/amr-lite.git"
+  }
+}

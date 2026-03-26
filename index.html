@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AMR Lite: Static, privacy-preserving AMR gene detection using k-mer containment. Genotype-only demo; does not predict phenotype.">
+  <title>AMR Lite | K-mer Based AMR Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Toast Notifications Container -->
+  <div id="toastContainer" class="toast-container" role="region" aria-label="Notifications" aria-live="polite"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header role="banner">
+      <h1>AMR Lite</h1>
+      <p class="subtitle">K-mer Based Antimicrobial Resistance Gene Detection</p>
+      <p class="description">
+        A static, browser-only, privacy-preserving tool for detecting putative AMR genes from assembled genomes using k-mer containment scoring.
+      </p>
+    </header>
+
+    <!-- Main Content -->
+    <main role="main">
+      <!-- Input Section -->
+      <section aria-labelledby="input-heading" class="input-section">
+        <h2 id="input-heading">1. Load Assembled Genome</h2>
+        
+        <div class="file-input-group">
+          <label for="fastaInput" class="file-label">
+            Select FASTA File:
+          </label>
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              id="fastaInput" 
+              accept=".fa,.fna,.fasta,.gz" 
+              aria-label="Select FASTA or gzipped FASTA file"
+              aria-describedby="fasta-help"
+            >
+            <div class="file-input-placeholder">
+              <span id="fileName">No file selected</span>
+              <span class="file-size"></span>
+            </div>
+          </div>
+          <p id="fasta-help" class="help-text">
+            Supports: .fasta, .fa, .fna, or gzipped (.gz) variants
+          </p>
+        </div>
+
+        <div class="sample-link">
+          <a href="#" id="sampleLink" aria-label="Download sample FASTA file for testing">
+            📥 Download Sample FASTA
+          </a>
+        </div>
+      </section>
+
+      <!-- Analysis Settings Section -->
+      <section aria-labelledby="settings-heading" class="settings-section">
+        <h2 id="settings-heading">2. Analysis Settings</h2>
+        
+        <div class="settings-grid">
+          <div class="form-group">
+            <label for="kmerSize">K-mer Size:</label>
+            <input 
+              type="number" 
+              id="kmerSize" 
+              value="21" 
+              min="15" 
+              max="31" 
+              step="2"
+              aria-describedby="kmer-help"
+            >
+            <small id="kmer-help">Typical: 21 bp (adjust for sensitivity)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="minShared">Min. Shared K-mers:</label>
+            <input 
+              type="number" 
+              id="minShared" 
+              value="50" 
+              min="1" 
+              max="1000" 
+              step="10"
+              aria-describedby="minShared-help"
+            >
+            <small id="minShared-help">Minimum k-mers required for hit (default: 50)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="threshold">Containment Threshold (%):</label>
+            <input 
+              type="number" 
+              id="threshold" 
+              value="90" 
+              min="1" 
+              max="100" 
+              step="1"
+              aria-describedby="threshold-help"
+            >
+            <small id="threshold-help">Min. containment % for hit (default: 90% - stricter, fewer false positives)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="signatureFilter">Filter Signatures by Organism:</label>
+            <select 
+              id="signatureFilter" 
+              aria-describedby="filter-help"
+            >
+              <option value="">All Organisms</option>
+              <!-- Options populated by JS -->
+            </select>
+            <small id="filter-help">Show only signatures from selected organism</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Action Buttons Section -->
+      <section aria-labelledby="actions-heading" class="actions-section">
+        <h2 id="actions-heading" class="sr-only">Analysis Actions</h2>
+        
+        <div class="button-group">
+          <button 
+            id="analyzeBtn" 
+            class="btn btn-primary"
+            aria-label="Start k-mer analysis on loaded genome"
+          >
+            ▶️ Analyse
+          </button>
+          <button 
+            id="downloadCsvBtn" 
+            class="btn btn-secondary"
+            disabled
+            aria-label="Download results as CSV"
+          >
+            📥 Download CSV
+          </button>
+          <button 
+            id="downloadJsonBtn" 
+            class="btn btn-secondary"
+            disabled
+            aria-label="Download results as JSON"
+          >
+            📥 Download JSON
+          </button>
+          <button 
+            id="resetBtn" 
+            class="btn btn-secondary"
+            aria-label="Clear all data and start over"
+          >
+            🔄 Reset
+          </button>
+        </div>
+      </section>
+
+      <!-- Status / Log Section -->
+      <section aria-labelledby="status-heading" class="status-section">
+        <h2 id="status-heading" class="sr-only">Analysis Status</h2>
+        <div 
+          id="statusBox" 
+          class="status-box" 
+          role="status" 
+          aria-live="assertive"
+          aria-label="Status messages"
+        ></div>
+        <div 
+          id="statusLog" 
+          class="status-log" 
+          role="log"
+          aria-label="Detailed status log"
+          aria-live="polite"
+        ></div>
+      </section>
+
+      <!-- Results Summary Panel -->
+      <section aria-labelledby="summary-heading" class="results-summary" id="summarySection" style="display: none;">
+        <h2 id="summary-heading">Results Summary</h2>
+        
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="summary-label">Contigs:</span>
+            <span id="contigCount" class="summary-value">—</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Total Length (bp):</span>
+            <span id="totalBp" class="summary-value">—</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Putative AMR Genes:</span>
+            <span id="amrCount" class="summary-value">—</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Analysis Time:</span>
+            <span id="analysisTime" class="summary-value">—</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Table Section -->
+      <section aria-labelledby="results-heading" class="results-section" id="resultsSection" style="display: none;">
+        <h2 id="results-heading">Detected AMR Genes</h2>
+        
+        <div id="tableContainer">
+          <div class="table-wrapper" role="region" aria-label="AMR detection results">
+            <table id="resultsTable" class="results-table" aria-describedby="table-help">
+              <thead>
+                <tr>
+                  <th scope="col">Gene ID</th>
+                  <th scope="col">Gene Name</th>
+                  <th scope="col">Organism</th>
+                  <th scope="col">Mechanism</th>
+                  <th scope="col">Containment (%)</th>
+                  <th scope="col">Shared K-mers</th>
+                  <th scope="col">Gene K-mers</th>
+                  <th scope="col">Length (bp)</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <!-- Results rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
+        <p id="table-help" class="help-text">
+          Table sorted by containment score (highest first). Containment % indicates stringency of match. Click column headers to sort. Use the filter box to search by gene ID or name.
+        </p>
+        </div>
+      </section>
+
+      <!-- QC Charts Placeholder -->
+      <section aria-labelledby="qc-heading" class="qc-section" id="qcSection" style="display: none;">
+        <h2 id="qc-heading">Quality Control &amp; Diagnostics</h2>
+        
+        <div class="charts-grid">
+          <div class="chart-container">
+            <h3>K-mer Distribution</h3>
+            <canvas 
+              id="kmerChart" 
+              width="400" 
+              height="300"
+              aria-label="K-mer frequency distribution histogram"
+            ></canvas>
+            <p class="chart-description">
+              Histogram of k-mer frequencies from the input genome.
+            </p>
+          </div>
+
+          <div class="chart-container">
+            <h3>Containment Score Distribution</h3>
+            <canvas 
+              id="containmentChart" 
+              width="400" 
+              height="300"
+              aria-label="Distribution of containment scores for detected genes"
+            ></canvas>
+            <p class="chart-description">
+              Frequency of containment scores across all gene signatures.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disclaimers Section -->
+      <section aria-labelledby="disclaimer-heading" class="disclaimer-section">
+        <h2 id="disclaimer-heading">⚠️ Important Disclaimers &amp; Limitations</h2>
+        
+        <div class="disclaimer-panel">
+          <h3>Genotype-Only, Not Phenotype</h3>
+          <p>
+            <strong>This is a genotype-only demo.</strong> Detection of AMR genes does <strong>not</strong> predict:
+          </p>
+          <ul>
+            <li>Antimicrobial resistance phenotype</li>
+            <li>Minimum inhibitory concentration (MIC)</li>
+            <li>Clinical resistance or treatment outcomes</li>
+            <li>Gene expression or function in the organism</li>
+          </ul>
+          <p>
+            For clinical guidance, consult AMRFinderPlus, ResFinder, CARD, or certified diagnostic laboratories.
+          </p>
+        </div>
+
+        <div class="disclaimer-panel">
+          <h3>Limited Scope</h3>
+          <ul>
+            <li>
+              <strong>Fixed signature pack:</strong> Contains only a small subset of known AMR genes. 
+              Not a comprehensive database.
+            </li>
+            <li>
+              <strong>K-mer containment only:</strong> Does not perform full alignment, 
+              functional annotation, or mutation detection.
+            </li>
+            <li>
+              <strong>No real-time updates:</strong> Signature pack is static; new AMR variants 
+              may not be detected.
+            </li>
+            <li>
+              <strong>Browser-only:</strong> Performance may vary with genome size on older devices.
+            </li>
+          </ul>
+        </div>
+
+        <div class="disclaimer-panel">
+          <h3>Privacy</h3>
+          <p>
+            All analysis runs locally in your browser. <strong>No data is sent to any server.</strong> 
+            Your genome sequences are not stored or transmitted.
+          </p>
+        </div>
+
+        <div class="disclaimer-panel legal">
+          <p>
+            <strong>Use for research and educational purposes only.</strong> 
+            Not intended for clinical diagnosis or therapeutic decision-making. 
+            Always consult qualified clinical microbiologists and follow regulatory guidelines.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+      <p>
+        AMR Lite is a static, browser-only, privacy-preserving demo for k-mer-based 
+        AMR gene detection.
+      </p>
+      <nav aria-label="Footer links">
+        <ul>
+          <li><a href="README.md" target="_blank" rel="noopener noreferrer">📖 Documentation</a></li>
+          <li><a href="LICENSE" target="_blank" rel="noopener noreferrer">📜 MIT License</a></li>
+          <li><a href="https://www.ncbi.nlm.nih.gov/pathogens/antimicrobial-resistance/AMRFinderPlus/" target="_blank" rel="noopener noreferrer">🔗 AMRFinderPlus</a></li>
+        </ul>
+      </nav>
+      <p class="copyright">
+        © 2024 AMR Lite Contributors. No warranty; use at your own risk.
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <!-- Pako for gzip decompression (multiple CDN sources for redundancy) -->
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js" onerror="loadPakoFallback()"></script>
+  <script>
+    // Fallback Pako loader
+    window.loadPakoFallback = function() {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/pako@2.1.0/dist/pako.min.js';
+      script.onerror = () => console.warn('Pako CDN unavailable - gzip support disabled');
+      document.head.appendChild(script);
+    };
+  </script>
+  
+  <!-- App (ES Module) - CACHE BUST: v20260326_fp_fix -->
+  <script type="module" src="app.js?t=20260326_seqdb"></script>
+</body>
+</html>
