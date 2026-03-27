@@ -10,12 +10,12 @@ A **static, browser-only, privacy-preserving** demo for detecting putative antim
 
 ## Features
 
-- 🔒 **Privacy-preserving**: All analysis runs in your browser; no data is sent to any server.
-- 📊 **K-mer containment scoring**: Compares genome k-mers against a precomputed signature pack.
-- 🚀 **No framework overhead**: Vanilla HTML, CSS, and JavaScript.
-- 📦 **Minimal dependencies**: Optional `pako` for gzip decompression.
-- ♿ **Accessible UI**: Semantic HTML, ARIA labels, keyboard-friendly.
-- 📱 **Responsive design**: Works on desktop and mobile.
+- **Privacy-preserving**: All analysis runs in your browser; no data is sent to any server.
+- **K-mer containment scoring**: Compares genome k-mers against a precomputed signature pack.
+- **No framework overhead**: Vanilla HTML, CSS, and JavaScript.
+- **Minimal dependencies**: Optional `pako` for gzip decompression.
+- **Accessible UI**: Semantic HTML, ARIA labels, keyboard-friendly.
+- **Responsive design**: Works on desktop and mobile.
 
 ## Quick Start
 
@@ -176,13 +176,13 @@ Requires:
 
 ## Future Enhancements
 
+(It means that I won't be actually working on these unless I get incentivised.)
 - [ ] WebR integration for k-mer counting via `kmer` R package.
 - [ ] Minimizer-based containment scoring.
 - [ ] SNP detection and resistance-associated mutations.
 - [ ] Phenotype prediction (requires external ML model; not in scope for genotype-only demo).
 - [ ] WASM-based k-mer counter for speed.
 - [ ] Larger, curated AMR signature packs (e.g., CARD, ResFinder, AMRFinderPlus panel).
-- [ ] Export results as TSV/CSV.
 
 ## References
 
@@ -199,5 +199,3 @@ MIT License. See [LICENSE](LICENSE) for details.
 This tool is provided for **research and educational purposes only**. It is not intended for clinical diagnosis or treatment decisions. Always consult clinical microbiology guidelines and certified diagnostic laboratories for clinical or therapeutic guidance.
 
 ---
-
-**Questions or Feedback?** Open an issue or contact the maintainers.
