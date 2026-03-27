@@ -56,14 +56,14 @@ amr-lite/
 │   ├── signature-loader.js       # Loads and caches AMR gene signatures from database
 │   ├── containment-matcher.js    # K-mer scoring and gene hit calculation
 │   ├── fasta-parser.js           # FASTA file parsing and validation
+│   ├── kmer-counter.js           # K-mer counting utilities
 │   ├── kmer-utils.js             # K-mer extraction (variable k-value support)
 │   ├── table-renderer.js         # Results table UI with sorting/filtering
 │   └── webr-init.js              # Optional WebR (R in browser) integration
 ├── data/                         # Signature databases
 │   └── amr_signatures_sequences.json.gz  # Primary: 9,325 genes (1.2 MB, sequence-based)
 ├── build/                        # Database build scripts (for developers)
-│   ├── build-enhanced-sequences-db.js    # Build sequence-based database
-│   └── [other build utilities]
+│   └── build-ncbi-dna-kmers.js   # Builds k-mer signatures from NCBI AMRFinderPlus sequences
 └── .gitignore                    # Git ignore rules
 ```
 
@@ -128,8 +128,8 @@ The `data/amr_signatures_sequences.json.gz` contains 9,325 AMR gene signatures i
 - `src/`: Application logic (modules for parsing, scoring, UI)
 - `data/`: Signature databases
 - `build/`: Scripts for building updated signature databases from NCBI data
-  - `build-enhanced-sequences-db.js`: Main builder for sequence-based database
-  - Run: `node build/build-enhanced-sequences-db.js`
+  - `build-ncbi-dna-kmers.js`: Builds k-mer signatures from NCBI AMRFinderPlus DNA sequences
+  - Run: `node build/build-ncbi-dna-kmers.js <input.fasta> <output.json.gz>`
 
 ### Build Development Server
 
@@ -147,11 +147,13 @@ Visit [http://localhost:8000](http://localhost:8000)
 
 ### Rebuild Database (Advanced Users)
 
-The database is pre-built, but to generate a new one:
+The database is pre-built, but to generate a new one from NCBI data:
 
 ```bash
 cd build
-node build-enhanced-sequences-db.js
+
+# From NCBI AMRFinderPlus DNA sequences
+node build-ncbi-dna-kmers.js /path/to/AMR_CDS.fa
 # Output: ../data/amr_signatures_sequences.json.gz
 ```
 
