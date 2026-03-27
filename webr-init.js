@@ -68,25 +68,24 @@ export async function initializeWebR() {
     return webRInstance;
   } catch (err) {
     const errorMsg = `WebR initialization failed: ${err.message}`;
-    logWebRStatus(errorMsg, 'error');
+    logWebRStatus(errorMsg, 'warning');
     webRError = err;
     webRReady = false;
     
-    // Disable Analyse button
-    const analyzeBtn = document.getElementById('analyzeBtn');
-    if (analyzeBtn) {
-      analyzeBtn.disabled = true;
-      analyzeBtn.title = 'WebR initialization failed. Please refresh the page.';
-    }
+    // Log to console for debugging but don't block analysis
+    console.warn('WebR initialization failed (this is non-blocking, JavaScript k-mer extraction will be used):', err);
     
-    // Show error in status box
+    // Don't disable the analyze button - WebR is optional
+    // JavaScript-based k-mer extraction will be used as fallback
+    
+    // Optionally show a subtle warning (not an error)
     const statusBox = document.getElementById('statusBox');
-    if (statusBox) {
-      statusBox.textContent = `⚠️ WebR Error: ${err.message}`;
-      statusBox.className = 'status-box status-error';
+    if (statusBox && !statusBox.textContent) {
+      statusBox.textContent = 'ℹ️ WebR unavailable (using JavaScript k-mer extraction)';
+      statusBox.className = 'status-box status-info';
     }
     
-    throw err;
+    // Don't throw - WebR is optional, the app can continue
   }
 }
 

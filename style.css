@@ -81,6 +81,51 @@ h1 {
   line-height: 1.5;
 }
 
+/* Logo and Header Layout */
+header .header-with-logo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+header .logo {
+  max-width: 120px;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+header .header-text {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  header .header-with-logo {
+    gap: 1.5rem;
+  }
+
+  header .logo {
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  header .header-with-logo {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  header .logo {
+    max-width: 80px;
+  }
+
+  header .header-text {
+    width: 100%;
+  }
+}
+
 /* Main content */
 main[role="main"] {
   margin-bottom: 2rem;

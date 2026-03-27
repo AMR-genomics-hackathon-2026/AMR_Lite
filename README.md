@@ -1,5 +1,9 @@
 # AMR Lite
 
+<div align="center">
+  <img src="AMR_lite_logo.png" alt="AMR Lite Logo" width="120" height="auto" />
+</div>
+
 A **static, browser-only, privacy-preserving** demo for detecting putative antimicrobial resistance (AMR) genes from assembled genomes using k-mer or minimizer containment.
 
 > **Disclaimer:** This is a **genotype-only** demo. It detects putative AMR genes via k-mer containment and does **NOT** predict phenotype or clinical resistance outcomes. For clinical guidance, consult AMRFinderPlus, CARD, or clinical microbiology standards.

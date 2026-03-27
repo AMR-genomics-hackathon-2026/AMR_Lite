@@ -66,6 +66,11 @@ export class TableManager {
         }
       });
     });
+    
+    // Render table with initial data
+    if (this.results.length > 0) {
+      this.render();
+    }
   }
 
   /**
