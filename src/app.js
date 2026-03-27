@@ -432,7 +432,7 @@ async function handleSampleDownload(e) {
   e.preventDefault();
   try {
     logStatus('Fetching sample genome...', 'info');
-    const response = await fetch('./data/sample_genes.fasta');
+    const response = await fetch('./sample_AMR_test_genome.fasta');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const sampleFasta = await response.text();
@@ -896,7 +896,7 @@ function handleReset() {
   UIElements.fileName.textContent = 'No file selected';
   UIElements.fileSize.textContent = '';
   UIElements.kmerSize.value = '21';
-  UIElements.threshold.value = '70'; // Default to 70%
+  UIElements.threshold.value = '90'; // Default to 90%
   UIElements.statusBox.textContent = '';
   UIElements.statusLog.innerHTML = '';
   UIElements.resultsBody.innerHTML = '';

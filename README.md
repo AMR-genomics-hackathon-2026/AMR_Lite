@@ -19,18 +19,24 @@ A **static, browser-only, privacy-preserving** demo for detecting putative antim
 
 ## Quick Start
 
-### Option 1: Open in Browser (Simplest)
+### Option 1: Use the Deployed Website (Recommended)
 
-1. Clone or download this repository
-2. Open `index.html` in any modern web browser
-3. Upload a FASTA genome file
-4. Click **Run Analysis**
-5. Download results as CSV or JSON
+**No setup needed!** Visit the live application:
 
-### Option 2: Serve Locally (Recommended for Development)
+👉 **https://amr-genomics-hackathon-2026.github.io/AMR_Lite/**
+
+1. Open the link in your web browser
+2. Upload a FASTA genome file (or download the sample below)
+3. Click **Run Analysis**
+4. Download results as CSV or JSON
+
+### Option 2: Run Locally (Development)
+
+Clone or download this repository:
 
 ```bash
-cd amr-lite
+git clone https://github.com/AMR-genomics-hackathon-2026/AMR_Lite.git
+cd AMR_Lite
 
 # Start local server (Python 3)
 python3 -m http.server 8000
