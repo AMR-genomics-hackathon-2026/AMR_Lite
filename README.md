@@ -183,7 +183,6 @@ Requires:
 - **AMRFinderPlus**: https://www.ncbi.nlm.nih.gov/pathogens/antimicrobial-resistance/AMRFinderPlus/
 - **CARD**: https://card.mcmaster.ca/
 - **ResFinder**: https://www.genomicepidemiology.org/
-- **K-mer containment methods**: [arXiv](https://arxiv.org/search/?query=kmer+containment)
 
 ## License
 
