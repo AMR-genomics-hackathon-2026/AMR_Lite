@@ -19,136 +19,141 @@ A **static, browser-only, privacy-preserving** demo for detecting putative antim
 
 ## Quick Start
 
-### Option 1: Double-Click (No Terminal)
+### Option 1: Open in Browser (Simplest)
 
-1. Clone or download this repository.
-2. Open `index.html` by double-clicking it in your file manager.
-3. Select a FASTA file (`.fasta`, `.fa`, `.fna`, or gzipped variants).
-4. Adjust k-mer size and containment threshold if needed.
-5. Click **Run Analysis**.
+1. Clone or download this repository
+2. Open `index.html` in any modern web browser
+3. Upload a FASTA genome file
+4. Click **Run Analysis**
+5. Download results as CSV or JSON
 
-### Option 2: Serve Locally (Recommended for Dev)
-
-```bash
-cd amr-lite
-npm install
-npm run serve
-```
-
-Then open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Option 3: npx serve
+### Option 2: Serve Locally (Recommended for Development)
 
 ```bash
 cd amr-lite
-npx serve .
+
+# Start local server (Python 3)
+python3 -m http.server 8000
+# or with npm
+npm install -g http-server
+http-server -p 8000
 ```
+
+Then open [http://localhost:8000](http://localhost:8000)
 
 ## Project Structure
 
 ```
 amr-lite/
-├── index.html                 # Main UI (semantic HTML + accessibility)
-├── app.js                     # Core logic: FASTA parsing, k-mer extraction, scoring
-├── style.css                  # Responsive styling
-├── package.json               # Optional npm tooling (pako, dev scripts)
-├── .editorconfig              # Editor config (indentation, charset)
-├── .gitignore                 # Git ignore patterns (node_modules, macOS, etc.)
-├── LICENSE                    # MIT License
-├── README.md                  # This file
-├── assets/                    # Static assets (images, fonts, etc.)
-└── data/
-    └── amr_signatures.json.gz # Precomputed signature pack (gzipped JSON)
+├── index.html                    # Main UI (semantic HTML + accessibility)
+├── style.css                     # Responsive styling
+├── package.json                  # npm dependencies (pako for gzip)
+├── LICENSE                       # MIT License
+├── README.md                     # This file
+├── AMR_lite_logo.png             # Logo
+├── src/                          # Application source code
+│   ├── app.js                    # Main controller, FASTA parsing, analysis orchestration
+│   ├── signature-loader.js       # Loads and caches AMR gene signatures from database
+│   ├── containment-matcher.js    # K-mer scoring and gene hit calculation
+│   ├── fasta-parser.js           # FASTA file parsing and validation
+│   ├── kmer-utils.js             # K-mer extraction (variable k-value support)
+│   ├── table-renderer.js         # Results table UI with sorting/filtering
+│   └── webr-init.js              # Optional WebR (R in browser) integration
+├── data/                         # Signature databases
+│   └── amr_signatures_sequences.json.gz  # Primary: 9,325 genes (1.2 MB, sequence-based)
+├── build/                        # Database build scripts (for developers)
+│   ├── build-enhanced-sequences-db.js    # Build sequence-based database
+│   └── [other build utilities]
+└── .gitignore                    # Git ignore rules
 ```
 
-## How It Works
+## Database Format
 
-### 1. Load Genome
-
-Upload an assembled genome in FASTA format (.fasta, .fa, .fna, or gzipped).
-
-### 2. Extract K-mers
-
-The app extracts all k-mers (default 21 bp) from your genome sequence using a sliding window.
-
-### 3. Compare Against Signatures
-
-For each AMR gene signature in the pack, it calculates the percentage of that gene's k-mers found in your genome (k-mer containment).
-
-### 4. Report Results
-
-Genes exceeding the containment threshold (default 90%) are reported with:
-- **Gene ID** and name
-- **Organism** association
-- **Mechanism** (e.g., beta-lactamase, efflux pump)
-- **Containment %** (higher = stronger signal)
-
-## Signature Pack Format
-
-The `data/amr_signatures.json.gz` file contains a JSON structure like:
+The `data/amr_signatures_sequences.json.gz` contains 9,325 AMR gene signatures in **sequence-based format**:
 
 ```json
-{
-  "blaNDM-1": {
-    "name": "NDM-1 Beta-Lactamase",
+[
+  {
+    "gene_id": "blaNDM-1",
+    "name": "NDM-1 Beta-Lactamase", 
+    "sequence": "ACGTACGTACGT...",    # DNA sequence of the gene
+    "length_bp": 813,                 # Gene length in base pairs
     "organism": "Enterobacteriaceae",
-    "kmers": ["ACGTACGTACGTACGTACGTA", "..."],
     "mechanism": "Beta-lactamase (carbapenem resistance)",
     "phenotype_note": "Genotype only; phenotype prediction not supported"
   },
   ...
-}
+]
 ```
 
-See `app.js` > `createMockSignatures()` for the demo signature structure.
+**Key features:**
+- Sequences can be analyzed with **any k-value** (15, 21, 31, etc.) at runtime
+- Replaces legacy k-mer format (95% space savings: 28 MB → 1.2 MB)
+- Supports both gzipped (1.2 MB) and uncompressed (12 MB) fallback
+- Backwards compatible with k-mer matching algorithm
 
-## Parameters
+## Analysis Parameters
 
-- **K-mer size** (default: 21): Standard for AMR gene signatures; adjust for sensitivity/specificity.
-- **Containment threshold** (default: 90%): Minimum % of gene k-mers required to report a hit.
+- **K-mer size** (default: 21 bp): Adjustable at runtime (15, 21, 31+). Higher k-values are more specific but require longer perfect matches.
+- **Containment threshold** (default: 90%): Minimum % of gene k-mers required to report a hit. Lower threshold = more hits (sensitivity), higher = fewer hits (specificity).
 
 ## Limitations
 
-1. **Genotype-only**: Does not predict phenotype, MIC, or clinical resistance.
-2. **No full assembly validation**: Only tests k-mer containment; does not perform alignment or functional annotation.
-3. **Fixed signature pack**: Limited to precomputed signatures; not a comprehensive AMR database like AMRFinderPlus or CARD.
-4. **No minimizer optimization**: Uses naive k-mer extraction; could be optimized with minimizers for speed.
+1. **Genotype-only**: Does not predict phenotype, MIC, or clinical resistance outcomes.
+2. **No alignment validation**: Only tests k-mer containment; does not perform sequence alignment or functional annotation.
+3. **Fixed signature set**: Limited to 9,325 precomputed signatures; not a comprehensive database like AMRFinderPlus or CARD.
+4. **Browser-based only**: Large genomes (>100 MB) may be slow; designed for typical bacterial assemblies (<10 MB).
+5. **Privacy note**: While no data is uploaded to servers, be cautious uploading sensitive genome data to shared computers.
 
 ## Dependencies
 
 ### Required
 
-- Modern web browser (Chrome, Firefox, Safari, Edge).
+- **Modern web browser** with ES6 module support
+  - Chrome ≥ 61 | Firefox ≥ 67 | Safari ≥ 11 | Edge ≥ 79
 
 ### Optional
 
-- **`pako`** (npm): For gzip decompression support.
-  - Install: `npm install --save pako`
-  - If not available, `.gz` files will fail gracefully.
+- **pako** (npm): For gzip decompression
+  - Installed via `npm install pako` 
+  - If unavailable, falls back to uncompressed database (12 MB, slower)
+- **WebR** (CDN): For optional R-based k-mer analysis
+  - Loads from `https://webr.r-wasm.org/`
+  - If unavailable, JavaScript k-mer extraction is used (recommended, faster)
 
-## Development
+## Development & Database Building
 
-### Install Dependencies
+### Source Code Structure
+
+- `src/`: Application logic (modules for parsing, scoring, UI)
+- `data/`: Signature databases
+- `build/`: Scripts for building updated signature databases from NCBI data
+  - `build-enhanced-sequences-db.js`: Main builder for sequence-based database
+  - Run: `node build/build-enhanced-sequences-db.js`
+
+### Build Development Server
 
 ```bash
+# Install dependencies (optional)
 npm install
+
+# Start local server
+python3 -m http.server 8000
+# or
+npm install -g http-server && http-server -p 8000
 ```
 
-### Run Development Server
+Visit [http://localhost:8000](http://localhost:8000)
+
+### Rebuild Database (Advanced Users)
+
+The database is pre-built, but to generate a new one:
 
 ```bash
-npm run dev
+cd build
+node build-enhanced-sequences-db.js
+# Output: ../data/amr_signatures_sequences.json.gz
 ```
-
-### Build (if needed)
-
-```bash
-npm run build
-```
-
-### Lint
-
-Currently no linting configured; add ESLint if desired.
 
 ## Browser Compatibility
 
