@@ -170,12 +170,17 @@ async function initApp() {
     // Initialize WebR first
     logStatus('Initializing WebR for k-mer analysis...', 'info');
     await initializeWebR();
-    State.webRReady = true;
-    logStatus('WebR initialized successfully', 'success');
+    
+    // Check if WebR actually succeeded
+    if (State.webRReady) {
+      logStatus('✓ WebR initialized successfully', 'success');
+    } else {
+      logStatus('ℹ️ WebR unavailable - using JavaScript k-mer extraction', 'info');
+      State.webRReady = false;
+    }
   } catch (err) {
-    console.error('WebR initialization failed:', err);
-    logStatus(`WebR init error: ${err.message}. Falling back to JS-only mode.`, 'warning');
-    // Continue with JS-only mode; don't fail the whole app
+    console.error('WebR initialization error:', err);
+    logStatus('ℹ️ WebR unavailable - using JavaScript k-mer extraction', 'info');
     State.webRReady = false;
   }
 

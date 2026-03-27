@@ -3,6 +3,23 @@ node_modules/
 package-lock.json
 yarn.lock
 
+# Documentation (keep only README.md)
+*.md
+!README.md
+
+# Database files - keep only the active compressed sequence database
+data/*.json
+data/*.json.gz
+!data/amr_signatures_sequences.json.gz
+
+# Test data and samples
+data/S01098280_*.tsv
+data/S01098280_*.fa
+data/amrfinder_realistic.fasta
+data/sample_genes.fasta
+data/test_db*.json.gz
+data/amr_signatures_minimizers.json
+
 # npm
 npm-debug.log*
 npm-error.log*

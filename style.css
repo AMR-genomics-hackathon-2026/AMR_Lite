@@ -90,7 +90,7 @@ header .header-with-logo {
 }
 
 header .logo {
-  max-width: 120px;
+  max-width: 70px;
   height: auto;
   object-fit: contain;
   flex-shrink: 0;
@@ -106,7 +106,7 @@ header .header-text {
   }
 
   header .logo {
-    max-width: 100px;
+    max-width: 60px;
   }
 }
 
@@ -118,7 +118,7 @@ header .header-text {
   }
 
   header .logo {
-    max-width: 80px;
+    max-width: 50px;
   }
 
   header .header-text {

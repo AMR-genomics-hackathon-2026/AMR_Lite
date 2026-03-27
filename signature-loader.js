@@ -167,9 +167,29 @@ export async function loadSignatures(url = '/data/amr_signatures_sequences.json.
       }
     }
     
-    // Attempt 3: Uncompressed fallback (277 MB - very slow)
+    // Attempt 3: Uncompressed fallback (sequence-based JSON)
     if (!data) {
-      console.warn('[Signature Loader] ⚠️  Pako library or remote files unavailable - falling back to uncompressed JSON');
+      console.warn('[Signature Loader] ⚠️  Pako library unavailable - falling back to uncompressed sequence JSON');
+      const jsonUrl = '/data/amr_signatures_sequences.json';
+      try {
+        const response = await fetch(jsonUrl);
+        
+        if (response.ok) {
+          console.log('[Signature Loader] Loading uncompressed JSON (12 MB - this will take 15-30 seconds)...');
+          data = await response.json();
+          dbFormat = 'sequence-based (UNCOMPRESSED FALLBACK)';
+        } else {
+          throw new Error(`Sequence DB uncompressed HTTP ${response.status}`);
+        }
+      } catch (err) {
+        console.log(`[Signature Loader] Sequence uncompressed fallback failed: ${err.message}, trying legacy uncompressed...`);
+        data = null;
+      }
+    }
+    
+    // Attempt 4: Legacy uncompressed fallback (277 MB - very slow)
+    if (!data) {
+      console.warn('[Signature Loader] ⚠️  All gzipped databases unavailable - falling back to legacy uncompressed JSON');
       const jsonUrl = '/data/amr_signatures.json';
       const response = await fetch(jsonUrl);
       
@@ -177,7 +197,7 @@ export async function loadSignatures(url = '/data/amr_signatures_sequences.json.
         throw new Error(`Uncompressed DB HTTP ${response.status}: Could not load any database`);
       }
       
-      console.log('[Signature Loader] ⚠️  Loading uncompressed JSON (277 MB - this will take 30-60 seconds)...');
+      console.log('[Signature Loader] ⚠️  Loading legacy uncompressed JSON (277 MB - this will take 30-60 seconds)...');
       data = await response.json();
       dbFormat = 'uncompressed (SLOW)';
       dbSize = '277';
